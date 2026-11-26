@@ -1,0 +1,41 @@
+{
+  "manifest_version": 3,
+  "name": "MDEV QA Reporter",
+  "version": "1.0.0",
+  "description": "Capture screenshots and submit QA reports directly to Notion or Google Docs.",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqwbMZqM74UEWxatALe6u0wOeccoDLtbIujerBDacWK7FQ6z7Rfolr2Gk1aoYJniP5HNbb2UmyacM4i2bPw4KZk1B5AN1bXYLlpi0zCM58xHA/Dg+DlNsZofQMkTHJz1kvlGIIthKUErlY4jqDfUPv8oGtQ9npVH4baxxMInybfu08L9QW5ViJdMBZp9e6mFuIXHfw137PBF3RJEgDdKT2s/UAxjIRRywrcF9BEHaRR1jFeHsCToNh8HEzQWp+cCtPDvRyWeby6TElhsfLFhlWoGUnaI9a9VBr583IGCwqI70v43OviaYjqg7bGOSrg6H1xoXM3Xhgmhz7WuKajWQgwIDAQAB",
+  "permissions": ["activeTab", "tabs", "scripting", "storage", "identity"],
+  "oauth2": {
+    "client_id": "597359408023-j2mb3v1tgl5iorijp67hs4evhbkfgpit.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/documents",
+      "https://www.googleapis.com/auth/drive.file"
+    ]
+  },
+  "host_permissions": [
+    "https://api.notion.com/*",
+    "https://docs.googleapis.com/*",
+    "https://www.googleapis.com/*"
+  ],
+  "optional_host_permissions": ["https://*.workers.dev/*"],
+  "action": { "default_popup": "popup.html" },
+  "background": { "service_worker": "background.js" },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["log_capture.js"],
+      "world": "MAIN",
+      "run_at": "document_start"
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [{
+    "resources": ["editor.html", "editor.js", "editor.css"],
+    "matches": ["<all_urls>"]
+  }]
+}

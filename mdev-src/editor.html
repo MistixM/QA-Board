@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MDEV QA – Report Issue</title>
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="editor.css">
+</head>
+<body>
+<div id="app">
+  <div id="editor-pane">
+    <div id="editor-header">
+      <span class="logo">⬡</span>
+      <h2>Screenshot Preview</h2>
+    </div>
+    <div id="canvas-wrap"><canvas id="main-canvas" tabindex="0" aria-label="Screenshot annotation canvas"></canvas></div>
+    <div id="annotation-bar" role="toolbar" aria-label="Screenshot annotations">
+      <button type="button" class="annotation-tool" data-tool="box" aria-pressed="false" title="Drag to draw a box">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>
+        <span>Box</span>
+      </button>
+      <button type="button" class="annotation-tool" data-tool="line" aria-pressed="false" title="Drag to draw a line">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 20 20 4"/></svg>
+        <span>Line</span>
+      </button>
+      <button type="button" class="annotation-tool" data-tool="arrow" aria-pressed="false" title="Drag toward the arrow tip">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 20 20 4M7 4h13v13"/></svg>
+        <span>Arrow</span>
+      </button>
+      <button type="button" class="annotation-tool" data-tool="text" aria-pressed="false" title="Click the screenshot to place text">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6V3h16v3M12 3v18M8 21h8"/></svg>
+        <span>Text</span>
+      </button>
+      <div id="annotation-color-control">
+        <button type="button" id="annotation-color-btn" aria-expanded="false" aria-controls="annotation-palette" title="Annotation color">
+          <span id="annotation-color-preview" aria-hidden="true"></span>
+          <span>Color</span>
+          <svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+        <div id="annotation-palette" hidden role="group" aria-label="Annotation colors">
+          <div class="annotation-swatches">
+            <button type="button" data-color="#FFFFFF" style="--swatch:#FFFFFF" aria-label="White" aria-pressed="false" title="White"></button>
+            <button type="button" data-color="#111111" style="--swatch:#111111" aria-label="Black" aria-pressed="false" title="Black"></button>
+            <button type="button" data-color="#808080" style="--swatch:#808080" aria-label="Gray" aria-pressed="false" title="Gray"></button>
+            <button type="button" data-color="#FF3333" style="--swatch:#FF3333" aria-label="Red" aria-pressed="true" title="Red"></button>
+            <button type="button" data-color="#FF8C00" style="--swatch:#FF8C00" aria-label="Orange" aria-pressed="false" title="Orange"></button>
+            <button type="button" data-color="#FFD700" style="--swatch:#FFD700" aria-label="Yellow" aria-pressed="false" title="Yellow"></button>
+            <button type="button" data-color="#22C55E" style="--swatch:#22C55E" aria-label="Green" aria-pressed="false" title="Green"></button>
+            <button type="button" data-color="#06B6D4" style="--swatch:#06B6D4" aria-label="Cyan" aria-pressed="false" title="Cyan"></button>
+            <button type="button" data-color="#3B82F6" style="--swatch:#3B82F6" aria-label="Blue" aria-pressed="false" title="Blue"></button>
+            <button type="button" data-color="#A855F7" style="--swatch:#A855F7" aria-label="Purple" aria-pressed="false" title="Purple"></button>
+          </div>
+          <label class="annotation-custom-color" for="annotation-custom-color">More colors <input id="annotation-custom-color" type="color" value="#ff3333"></label>
+        </div>
+      </div>
+      <button type="button" id="clear-ann-btn" hidden>Clear</button>
+    </div>
+  </div>
+
+  <div id="form-pane">
+    <h2 id="form-heading">Report Issue</h2>
+
+    <label>Destination
+      <select id="f-destination">
+        <option value="notion">Notion</option>
+        <option value="gdocs">Google Docs</option>
+      </select>
+    </label>
+    <label class="checkbox-label">
+      <input type="checkbox" id="f-destination-default">
+      <span>Set as default destination</span>
+    </label>
+
+    <label id="f-database-label">Database
+      <select id="f-database" disabled>
+        <option value="">Loading databases…</option>
+      </select>
+    </label>
+
+    <label>Title *
+      <input type="text" id="f-title" placeholder="e.g. Button misaligned on checkout">
+    </label>
+
+    <label>Full Description *
+      <textarea id="f-desc" rows="4" placeholder="Describe the issue in detail…"></textarea>
+    </label>
+
+    <label>Brief Description <span class="opt">(AI-generated summary)</span>
+      <textarea id="f-brief" rows="2" placeholder="A short summary will appear here after AI generation…"></textarea>
+    </label>
+
+    <label>Status *
+      <select id="f-status">
+        <option value="TODO">TODO</option>
+        <option value="In Progress">In Progress</option>
+        <option value="In Review">In Review</option>
+        <option value="Completed">Completed</option>
+      </select>
+    </label>
+
+    <label>Severity
+      <select id="f-severity">
+        <option value="Low">Low</option>
+        <option value="Medium" selected>Medium</option>
+        <option value="High">High</option>
+      </select>
+    </label>
+
+    <label>Page URL
+      <input type="text" id="f-url" placeholder="https://…">
+    </label>
+
+    <!-- Extra attachments -->
+    <label>Extra Attachments <span class="opt">(optional)</span>
+      <div id="drop-zone">
+        <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <span>Drop images here or <u id="browse-link">browse</u></span>
+        <input type="file" id="extra-files" accept="image/*" multiple hidden>
+      </div>
+      <div id="file-list"></div>
+    </label>
+
+    <!-- Console logs -->
+    <label class="checkbox-label">
+      <input type="checkbox" id="f-logs">
+      <span>Attach console logs to report</span>
+    </label>
+
+    <!-- Steps to reproduce -->
+    <label class="checkbox-label">
+      <input type="checkbox" id="f-events">
+      <span>Attach steps to reproduce</span>
+    </label>
+
+    <!-- Network requests -->
+    <label class="checkbox-label">
+      <input type="checkbox" id="f-requests">
+      <span>Attach network requests</span>
+    </label>
+
+    <button type="button" id="ai-gen-btn" disabled>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z"/></svg>
+      Complete with AI
+    </button>
+
+    <button id="submit-btn">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22 11 13 2 9l20-7z"/></svg>
+      Submit Report
+    </button>
+  </div>
+</div>
+
+<div id="toast">
+  <span id="toast-icon">✅</span>
+  <div><strong>Report submitted!</strong><p id="toast-msg"></p></div>
+</div>
+
+<dialog id="annotation-text-dialog">
+  <form method="dialog" id="annotation-text-form">
+    <label for="annotation-text-input">Annotation text</label>
+    <textarea id="annotation-text-input" rows="3" placeholder="Enter text for this spot…" required></textarea>
+    <div class="annotation-dialog-actions">
+      <button type="submit" value="cancel" formnovalidate>Cancel</button>
+      <button type="submit" value="add">Add text</button>
+    </div>
+  </form>
+</dialog>
+<script src="ai-client.js"></script>
+<script src="report-metadata.js"></script>
+<script src="config.local.js"></script>
+<script src="editor.js"></script>
+</body>
+</html>

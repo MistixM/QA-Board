@@ -1,0 +1,43 @@
+# Credentials and machine-local configuration
+.env
+.env.*
+*.env
+*.env.*
+.dev.vars
+.dev.vars.*
+config.local.js
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*.crt
+*.cer
+.aws/
+
+# Archives and extension packages
+*.zip
+*.tar
+*.tar.*
+*.tgz
+*.gz
+*.bz2
+*.xz
+*.7z
+*.rar
+*.crx
+
+# Dependencies, build output and local tooling
+node_modules/
+.wrangler/
+dist/
+build/
+coverage/
+*.log
+.DS_Store
+Thumbs.db
+.claude/
+.codex/
+.agents/
+.idea/
+.vscode/

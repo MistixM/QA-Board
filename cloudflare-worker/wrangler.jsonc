@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "mdev-qa-ai",
+  "account_id": "0db5267deeafd53baf582b69030d49d3",
+  "main": "src/index.js",
+  "compatibility_date": "2026-11-16",
+  "workers_dev": true,
+  "ai": { "binding": "AI" },
+  "vars": {
+    "ALLOWED_ORIGIN": "chrome-extension://iaohooohkpmcjnnfnabbggfobfcjackm"
+  }
+}
